@@ -1,5 +1,8 @@
 {
   "dependencies": {
+    "accel-mma84": "^0.2.4",
+    "climate-si7005": "^0.1.4",
+    "ir-attx4": "^0.2.7",
     "tessel": "^0.3.23"
   }
 }
