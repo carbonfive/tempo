@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "tessel": "^0.3.23"
+  }
+}
