@@ -1,7 +1,7 @@
 var tessel = require('tessel');
 var climatelib = require('climate-si7020');
 
-var climate = climatelib.use(tessel.port.C);
+var climate = climatelib.use(tessel.port.B);
 
 climate.on('ready', function () {
   setImmediate(function loop () {

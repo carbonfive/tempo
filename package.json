@@ -3,6 +3,7 @@
     "accel-mma84": "^0.2.4",
     "ambient-attx4": "^0.2.5",
     "climate-si7020": "^0.1.1",
-    "ir-attx4": "^0.2.7"
+    "ir-attx4": "^0.2.7",
+    "node-pico": "2.0.0"
   }
 }
