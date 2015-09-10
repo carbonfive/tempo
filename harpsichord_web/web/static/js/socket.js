@@ -55,7 +55,7 @@ socket.connect({token: window.userToken})
 
 let $climate = $('.js-climate-data')
 
-var data = {temperature: 0, humidity: 0}
+var data = {temperature: 80, humidity: 0}
 
 // Now that you are connected, you can join channels with a topic:
 let channel = socket.channel("data:climate", {})
@@ -85,20 +85,21 @@ ambientChannel.on('new_data', payload => {
 function rand(min, max) {
   return (Math.random() * (max - min) + min)|0
 }
-var MAX_CIRCLES = 300
+var MAX_CIRCLES = 100
 var X_VEL = 3
 var Y_VEL = 3
-var MIN_COLOR = 20
-var MAX_COLOR = 80
-var MIN_R = 10
-var MAX_R = 50
-var MIN_TTL = 70
-var MAX_TTL = 100
+var MIN_COLOR = 0
+var MAX_COLOR = 50
+var MIN_R = 200
+var MAX_R = 400
+var MIN_TTL = 200
+var MAX_TTL = 600
+
 function Circle(x, y, r) {
-  this.x     = x
-  this.y     = y
+  this.x     = 400
+  this.y     = 600
   this.r     = rand(MIN_R, MAX_R)
-  this.color = rand(MIN_COLOR, MAX_COLOR)
+  this.color = (data.temperature * 2.5) + rand(MIN_COLOR, MAX_COLOR)
   this.xVel  = rand(-X_VEL, X_VEL)
   this.yVel  = rand(-Y_VEL, Y_VEL)
   this.alive = true
@@ -112,7 +113,7 @@ Circle.prototype.draw = function(ctx) {
   ctx.fill();
 }
 Circle.prototype.colorString = function() {
-  return 'hsla(48,100%,'+ this.color +'%,' + this.alpha() + ')'
+  return 'hsla(' + this.color + ',100%,48%,' + this.alpha() + ')'
 }
 Circle.prototype.update = function() {
   this.x += this.xVel
@@ -122,7 +123,10 @@ Circle.prototype.update = function() {
   }
 }
 Circle.prototype.alpha = function() {
-  return (((this.aliveCount * -100) / this.ttl) + 100) / 100
+  if (this.aliveCount < (this.ttl / 2) )
+    return ((this.ttl / (this.aliveCount * 100)) - 100) / 100
+  else
+    return (((this.aliveCount * this.ttl)) - 100) / 100
 }
 Circle.prototype.isAlive = function() {
   return !!this.alive
@@ -143,17 +147,17 @@ function draw() {
   })
 }
 function clear() {
-  ctx.clearRect(0, 0, cw, ch)
+  // ctx.clearRect(0, 0, cw, ch)
 }
 function update() {
+  if (circles.length < MAX_CIRCLES)
+    circles.push( new Circle(data.temperature, data.humidity, 50) )
   circles.forEach(function(circle) {
     circle.update()
   })
   circles = circles.filter(function(circle) {
     return circle.isAlive()
   })
-  if (circles.length < MAX_CIRCLES)
-    circles.push( new Circle(data.temperature, data.humidity, 50) )
 }
 
 function animLoop() {
@@ -166,8 +170,5 @@ function animLoop() {
 }
 
 animLoop()
-
-
->>>>>>> WIP
 
 export default socket
