@@ -2,6 +2,7 @@ defmodule HarpsichordWeb.DataController do
   use HarpsichordWeb.Web, :controller
   alias HarpsichordWeb.Repo
   alias HarpsichordWeb.ClimateDatum
+  alias HarpsichordWeb.AmbientDatum
 
   def index(conn, _params) do
     data = Repo.all(ClimateDatum)
@@ -19,4 +20,17 @@ defmodule HarpsichordWeb.DataController do
         render conn, datum: "error"
     end
   end
+
+  def create(conn, %{"ambient" => datum}) do
+    changeset = AmbientDatum.changeset(%AmbientDatum{}, datum)
+
+    case Repo.insert(changeset) do
+      {:ok, ambient_datum} ->
+        HarpsichordWeb.Endpoint.broadcast! "data:ambient", "new_data", %{datum: %{light: ambient_datum.light, sound: ambient_datum.sound}}
+        render conn, datum: ambient_datum
+      {:error, changeset} ->
+        render conn, datum: "error"
+    end
+  end
+
 end

@@ -66,4 +66,17 @@ channel.on('new_data', payload => {
   $climate.append( $('<li>', {text: `temp: ${datum.temperature}, humidity: ${datum.humidity}`}) )
 })
 
+let $ambient = $('.js-ambient-data')
+
+// Now that you are connected, you can join channels with a topic:
+let ambientChannel = socket.channel("data:ambient", {})
+ambientChannel.join()
+  .receive("ok", resp => { console.log("Joined successfully", resp) })
+  .receive("error", resp => { console.log("Unable to join", resp) })
+
+ambientChannel.on('new_data', payload => {
+  let datum = payload.datum
+  $ambient.append( $('<li>', {text: `light: ${datum.light}, sound: ${datum.sound}`}) )
+})
+
 export default socket

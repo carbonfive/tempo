@@ -1,6 +1,9 @@
 defmodule HarpsichordWeb.DataChannel do
   use Phoenix.Channel
 
+  def join("data:ambient", auth_msg, socket) do
+    {:ok, socket}
+  end
   def join("data:climate", auth_msg, socket) do
     {:ok, socket}
   end
