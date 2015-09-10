@@ -1,5 +1,4 @@
 var Pico = require("node-pico");
-var note = require("./notes");
 var scale = require("./scale");
 var Sequence = require("./sequence");
 var data = require("./data");

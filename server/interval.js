@@ -1,14 +1,14 @@
-var note = require("./notes");
+var frequencies = require("./frequencies");
 
 module.exports = (function() {
   var interval = function() {
 
     var noteIdx = function(noteName) {
-      return note.noteNames.indexOf(noteName);
+      return frequencies.noteNames.indexOf(noteName);
     };
 
     var octaveDifference = function(rootIndex, halfSteps) {
-      return Math.floor((rootIndex + halfSteps) / note.count);
+      return Math.floor((rootIndex + halfSteps) / frequencies.count);
     };
 
     function octaveShift(freq, octave) {
@@ -33,9 +33,9 @@ module.exports = (function() {
           freqIndex = rootIdx + halfSteps;
         }
         else {
-          freqIndex = (rootIdx + halfSteps) % note.count;
+          freqIndex = (rootIdx + halfSteps) % frequencies.count;
         }
-        return octaveShift(note.frequencies[freqIndex], octaveChange);
+        return octaveShift(frequencies.frequencies[freqIndex], octaveChange);
       }
     }
   };

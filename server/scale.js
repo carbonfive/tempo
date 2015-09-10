@@ -1,4 +1,3 @@
-var note = require("./notes");
 var interval = require("./interval");
 
 module.exports = (function () {
