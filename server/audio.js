@@ -2,6 +2,7 @@ var Pico = require("node-pico");
 var note = require("./notes");
 var scale = require("./scale");
 var Sequence = require("./sequence");
+var data = require("./data");
 
 function samplesPerBeat(bpm, sampleRate) {
   return (sampleRate * 60) / bpm;
@@ -31,25 +32,31 @@ function song() {
     melody.push(octaveShift(dMaj[i], 4));
   }
 
-  console.log(melody);
-
   var seq = new Sequence(melody);
 
   var x1 = 0, y1 = null;
   var x2 = 0, y2 = null;
   var detune = 30;
 
-  var bpm = 120;
+  var bpm = null;
   var beats = 0.25;
-  var noteOn = true;
+  var noteOn = false;
 
   var remainder = 0;
   var volume = 0.25;
 
   var freq = 0;
 
-  function setNextNote() {
-    seq.next(function(noteFreq) {
+  data.registerListener(function(reading) {
+    console.log({id: reading.id, bpm: bpm});
+    bpm = reading.temperature;
+  });
+
+  function setNextNote(method) {
+    if ( typeof method === 'undefined' ) {
+      method = 'next';
+    }
+    seq[method](function(noteFreq) {
       freq = noteFreq;
       var n = forSampleRate(noteFreq, Pico.sampleRate);
       y1 = n;
@@ -63,17 +70,19 @@ function song() {
     var left  = e.buffers[0];
     var right = e.buffers[1];
 
-    remainder = remainder ? remainder : duration(bpm, beats, Pico.sampleRate);
+    if( bpm ) {
+      remainder = remainder ? remainder : duration(bpm, beats, Pico.sampleRate);
 
-    if(e.bufferSize >= remainder) {
-      remainder = 0;
-      noteOn = !noteOn;
-      if(noteOn) {
-        setNextNote();
+      if (e.bufferSize >= remainder) {
+        remainder = 0;
+        noteOn = !noteOn;
+        if (noteOn) {
+          setNextNote('random');
+        }
       }
-    }
-    else {
-      remainder -= e.bufferSize;
+      else {
+        remainder -= e.bufferSize;
+      }
     }
 
     for (var i = 0; i < e.bufferSize; i++) {

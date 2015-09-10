@@ -7,6 +7,10 @@ module.exports = (function() {
       notes = noteSeq;
     }
 
+    function getRandomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
     function incrementStep() {
       if( step === notes.length - 1) {
         step = 0;
@@ -20,6 +24,10 @@ module.exports = (function() {
       next: function(callback) {
         callback(notes[step]);
         incrementStep();
+      },
+      random: function(callback) {
+        step = getRandomInt(0, notes.length-1);
+        callback(notes[step]);
       }
     }
   }
