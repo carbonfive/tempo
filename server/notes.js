@@ -19,6 +19,9 @@ module.exports = (function () {
   ];
 
   return {
+    frequencies: FREQUENCIES,
+    noteNames: NAME_MAP,
+    count: NAME_MAP.length,
     freq: function (noteName) {
       var idx = NAME_MAP.indexOf(noteName);
       if(idx >= 0) {

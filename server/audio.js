@@ -1,5 +1,6 @@
 var Pico = require("node-pico");
 var note = require("./notes");
+var scale = require("./scale");
 var Sequence = require("./sequence");
 
 function samplesPerBeat(bpm, sampleRate) {
@@ -23,25 +24,23 @@ function forSampleRate(freq, sampleRate) {
 }
 
 function song() {
-  var scale = [
-    octaveShift(note.freq("C"), 4),
-    octaveShift(note.freq("D"), 4),
-    octaveShift(note.freq("E"), 4),
-    octaveShift(note.freq("F"), 4),
-    octaveShift(note.freq("G"), 4),
-    octaveShift(note.freq("A"), 4),
-    octaveShift(note.freq("B"), 4),
-    octaveShift(note.freq("C"), 5)
-  ];
+  var melody = [];
+  var dMaj = scale("E", "major").notes;
 
-  var seq = new Sequence(scale);
+  for(var i = 0; i < dMaj.length; i ++) {
+    melody.push(octaveShift(dMaj[i], 4));
+  }
+
+  console.log(melody);
+
+  var seq = new Sequence(melody);
 
   var x1 = 0, y1 = null;
   var x2 = 0, y2 = null;
   var detune = 30;
 
   var bpm = 120;
-  var beats = 1;
+  var beats = 0.25;
   var noteOn = true;
 
   var remainder = 0;
