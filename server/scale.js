@@ -29,7 +29,16 @@ module.exports = (function () {
     }
 
     return {
-      notes: notes
+      notes: notes,
+      rootNote: rootNote,
+      type: type,
+      getHalfStepsBetween: function (idxOne, idxTwo) {
+        var halfSteps = 0;
+        for(var i = idxOne+1; i < idxTwo; i++) {
+          halfSteps += scaleIntervals[i];
+        }
+        return halfSteps;
+      }
     }
   };
 
