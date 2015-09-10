@@ -12,8 +12,11 @@ defmodule HarpsichordWeb.DataController do
     changeset = ClimateDatum.changeset(%ClimateDatum{}, datum)
 
     case Repo.insert(changeset) do
-      {:ok, climate_datum} -> render conn, datum: climate_datum
-      {:error, changeset} -> render conn, datum: "error"
+      {:ok, climate_datum} ->
+        HarpsichordWeb.Endpoint.broadcast! "data:climate", "new_data", %{datum: %{temperature: climate_datum.temperature, humidity: climate_datum.humidity}}
+        render conn, datum: climate_datum
+      {:error, changeset} ->
+        render conn, datum: "error"
     end
   end
 end

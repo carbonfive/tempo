@@ -53,10 +53,17 @@ let socket = new Socket("/socket")
 
 socket.connect({token: window.userToken})
 
+let $climate = $('.js-climate-data')
+
 // Now that you are connected, you can join channels with a topic:
-let channel = socket.channel("topic:subtopic", {})
+let channel = socket.channel("data:climate", {})
 channel.join()
   .receive("ok", resp => { console.log("Joined successfully", resp) })
   .receive("error", resp => { console.log("Unable to join", resp) })
+
+channel.on('new_data', payload => {
+  let datum = payload.datum
+  $climate.append( $('<li>', {text: `temp: ${datum.temperature}, humidity: ${datum.humidity}`}) )
+})
 
 export default socket

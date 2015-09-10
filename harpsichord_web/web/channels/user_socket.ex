@@ -2,7 +2,7 @@ defmodule HarpsichordWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "rooms:*", HarpsichordWeb.RoomChannel
+  channel "data:*", HarpsichordWeb.DataChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
