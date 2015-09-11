@@ -11,6 +11,10 @@ module.exports = (function() {
   var pollingInterval = 1000;
   var polling = true;
 
+  var uri = function() {
+    return "http://" + server.ip + ":" + server.port + server.path
+  };
+
   var notifyListeners = function(data) {
     for(var i = 0; i < listeners.length; i++) {
       listeners[i](JSON.parse(data));
@@ -20,9 +24,11 @@ module.exports = (function() {
   var poll = function() {
     request({
         method: 'GET',
-        uri: "http://" + server.ip + ":" + server.port + server.path
+        uri: uri()
       }
       , function (error, response, body) {
+        console.log(error);
+        console.log(response);
         notifyListeners(body);
       }
     )
@@ -38,6 +44,9 @@ module.exports = (function() {
   run();
 
   return {
+    isAvailable: function() {
+
+    },
     registerListener: function(listener) {
       listeners.push(listener);
     },

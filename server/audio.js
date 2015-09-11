@@ -1,5 +1,6 @@
 var Pico = require("node-pico");
 var scale = require("./scale");
+var interval = require("./interval");
 var Sequence = require("./sequence");
 var data = require("./data");
 
@@ -11,14 +12,6 @@ function duration(bpm, beats, sampleRate) {
   return Math.round(beats * samplesPerBeat(bpm, sampleRate));
 }
 
-function octaveShift(freq, octave) {
-  while(octave > 1) {
-    freq = freq * 2;
-    octave -= 1;
-  }
-  return freq;
-}
-
 function forSampleRate(freq, sampleRate) {
   return freq / sampleRate;
 }
@@ -28,7 +21,7 @@ function song() {
   var dMaj = scale("E", "major").notes;
 
   for(var i = 0; i < dMaj.length; i ++) {
-    melody.push(octaveShift(dMaj[i], 4));
+    melody.push(interval.octaveShift(dMaj[i], 4));
   }
 
   var seq = new Sequence(melody);

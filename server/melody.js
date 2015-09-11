@@ -4,14 +4,6 @@ var scale = require("./scale");
 
 module.exports = (function() {
 
-  function octaveShift(freq, octave) {
-    while(octave > 1) {
-      freq = freq * 2;
-      octave -= 1;
-    }
-    return freq;
-  }
-
   var getFrequency = function(songScale, degree) {
     var halfSteps = songScale.getHalfStepsBetween(0, degree);
     return interval.getFreq(rootNote, halfSteps);
@@ -22,7 +14,7 @@ module.exports = (function() {
     for(var i = 0; i < song.notes.length; i++) {
       var songScale = scale(song.key, "major");
       var baseFreq = getFrequency(songScale, song.notes[i]);
-      frequencies.push(octaveShift(baseFreq, octave));
+      frequencies.push(interval.octaveShift(baseFreq, octave));
     }
   };
 
